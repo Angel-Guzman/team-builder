@@ -11,9 +11,7 @@ const teamMembers = [
     username: 'Angel',
     email: 'angel@angel.com',
     roles: [
-      'front-end engineer',
-      'back-end engineer',
-      'designer'
+      'back-end engineer'
     ]
   },
   {
@@ -21,8 +19,6 @@ const teamMembers = [
     username: 'David',
     email: 'david@david.com',
     roles: [
-      'front-end engineer',
-      'back-end engineer',
       'designer'
     ]
   },
@@ -31,16 +27,20 @@ const teamMembers = [
     username: 'Christian',
     email: 'christian@christian.com',
     roles: [
-      'front-end engineer',
-      'back-end engineer',
-      'designer'
+      'front-end engineer'
     ]
   }
 ]
 
 const teamMembersValues = {
   username: '',
-  email: ''
+  email: '',
+  roles: {
+    frontendengineer: false,
+    backendengineer: false,
+    designer: false,
+  },
+
 }
 
 function App() {
@@ -61,7 +61,9 @@ function App() {
     const newMember = {
       id: uuid(),
       username: formValues.username,
-      email: formValues.email
+      email: formValues.email,
+      roles: Object.keys(formValues.roles)
+        .filter(role => formValues.roles[role] === true)
     }
 
     setMembers([...members, newMember])
@@ -69,8 +71,23 @@ function App() {
     setFormValues(teamMembersValues)
   }
 
+  const onCheckBoxChangeHandler = evt => {
+
+    const { name } = evt.target
+
+    const isChecked = evt.target.checked
+
+    setFormValues({
+      ...formValues,
+      roles: {
+        ...formValues.roles,
+        [name]: isChecked
+      }
+    })
+  }
+
   return (
-    <div className="App">
+    <div className="container">
       <header><h1>Team Members Form App</h1></header>
      {
        members.map(member => {
@@ -82,6 +99,7 @@ function App() {
       <MemberForm 
         values={formValues}
         onInputChange={onInputChangeHandler}
+        onCheckboxChange={onCheckBoxChangeHandler}
         onSubmit={onSubmitHandler}
       />
     </div>
